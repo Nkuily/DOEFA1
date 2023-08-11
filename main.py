@@ -1,16 +1,18 @@
-# This is a sample Python script.
+import requests
+from bs4 import BeautifulSoup
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+url = "https://ctutraining.ac.za/roodepoort-campus/"
+r = requests.get(url)
+soup = BeautifulSoup(r.text, "html.parser")
 
-
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
-
-
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+imgs = soup.find_all("img")
+for img in imgs:
+    try:
+        name = img['alt']
+    except KeyError:
+        name = "ImageNoName"+str(imgs.index(img))
+    link = img['src']
+    with open(name + '.jpg', 'wb') as file:
+        down = requests.get('link')
+        file.write(down.content)
+    print(name, link)
